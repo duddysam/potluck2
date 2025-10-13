@@ -20,9 +20,14 @@ body{
 #main-header li{
     display: inline;
     padding: 40px;
-
 }
 
+#main-header .single-link{
+    position: absolute;
+    top:40px;
+    right:5%;
+
+}
 #navbar ul{
     list-style: none;
     padding:0;
@@ -37,7 +42,6 @@ body{
     font-size: 18px;
     padding-right: 20px;
 }
-
 
 a{
     color:blueviolet
