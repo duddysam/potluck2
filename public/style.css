@@ -58,7 +58,18 @@ a:hover{
 }
 
 
+.form{
+    padding: 10px;
 
+}
+
+.form-group{
+    padding-bottom:15px;
+}
+
+.form label{
+    display: block;
+}  
 
 
 
