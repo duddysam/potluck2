@@ -1,0 +1,57 @@
+
+
+body{
+    background-color: black;
+    color: rgb(125, 192, 23);
+
+}
+
+a{
+    color:blueviolet
+}
+
+a:hover{
+    color:red;
+}
+
+.fixed{
+    position:fixed;
+    top:400px;
+}
+
+.container{
+    width:80%;
+    margin:auto;
+    border: 7px, dotted rgb(125, 192, 23);
+    padding: 40px;
+    padding-top:10px;
+    border-radius:25px;
+
+}
+
+.button{
+    background-color: blueviolet;
+    color:aliceblue;
+
+}
+
+.button:hover{
+    background: red;
+    color:greenyellow;
+}
+.categories li{
+    padding-bottom:8px
+}
+
+.form{
+    padding: 10px;
+
+}
+
+.form-group{
+    padding-bottom:15px;
+}
+
+.form label{
+    display: block;
+}
