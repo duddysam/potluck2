@@ -1,23 +1,8 @@
-const { client, connectDB } = require('./index')
 const yargs = require('yargs')
 const appUser = require('./appuser.js')
+const events = require('./events.js')
 
 yargs.version('1.1.0')
-
-// function for verification purposes only
-async function runApp(){
-    await connectDB();
-
-    try {
-        const res = await client.query('SELECT * FROM appuser')
-        console.log(res['rows'])
-    } catch (err){
-        console.error('Error executing query', err);
-    } finally {
-        await client.end();
-        console.log('Disconnecting from postgreSQL database');
-    }
-}
 
 // add a new user
 yargs.command({
@@ -70,6 +55,7 @@ yargs.command({
     }
 })
 
+// get all users
 yargs.command({
     command: 'get_users',
     describe: 'see all users',
@@ -77,5 +63,102 @@ yargs.command({
         appUser.getUsers()
     }
 })
+
+
+// create an event
+yargs.command({
+    command: 'create_event',
+    describe: 'create a new event',
+    builder: {
+        name: {
+            describe: 'event name',
+            demandOption: true,
+            type: 'string'
+        },
+        address: {
+            describe: 'event address',
+            demandOption: true,
+            type: 'string',
+        },
+        date: {
+            describe: 'event date',
+            demandOption: true,
+            type: 'string'
+        },
+        theme: {
+            describe: 'event theme',
+            type: 'string'
+        },
+        description: {
+            describe: 'event description',
+            type: 'string'
+        },
+        photo: {
+            describe: 'event image',
+            type: 'string'
+        },
+        host: {
+            describe: 'event host id',
+            demandOption: true,
+            type: 'string'
+        }
+
+    },
+    handler: (argv) => {
+        events.createEvent(argv.name, argv.address, argv.date, argv.theme, argv.description, argv.photo, argv.host)
+    }
+
+})
+
+// delete an event
+yargs.command({
+    command: 'delete_event',
+    describe: 'deletes an event',
+    builder: {
+        name: {
+            describe: 'event name',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        events.deleteEvent(argv.name)
+    }
+})
+
+// get all events for a hostID
+yargs.command({
+    command: 'get_host_events',
+    describe: 'retrieves all events for a hostID',
+    builder: {
+        hostID: {
+            describe: 'host id number',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        events.getHostEvents(argv.hostID)
+    }
+})
+
+// get upcoming events for a user
+yargs.command({
+    command: 'get_upcoming_events',
+    describe: 'gets all upcoming events for a user - both hosting and invited to',
+    builder: {
+        userID: {
+            describe: 'user id number',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        events.getUpcomingEvents(argv.userID)
+    }
+})
+
+// get past events
+
 
 yargs.parse()

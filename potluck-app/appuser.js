@@ -1,6 +1,7 @@
 const validator = require('validator')
 const { client, connectDB } = require('./index')
 
+
 async function addUser(f_name, l_name, user_name, password, email) {
     await connectDB();
 
@@ -38,8 +39,26 @@ async function getUsers() {
     }
 }
 
+async function getUserID(username) {
+    await connectDB()
+
+    try {
+        const res = await client.query(`SELECT userID FROM appuser WHERE username = '${username}'`)
+        userid = res['rows'][0]['userid']
+        console.log(userid)
+        return userid
+    } catch (err) {
+        console.error('Error Executing Query', err);
+    } finally {
+        await client.end()
+    }
+}
+
+
+
 module.exports = {
     addUser: addUser,
     deleteUser: deleteUser,
-    getUsers: getUsers
+    getUsers: getUsers,
+    getUserID: getUserID
 }
