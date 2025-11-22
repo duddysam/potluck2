@@ -1,6 +1,9 @@
 const yargs = require('yargs')
 const appUser = require('./appuser.js')
 const events = require('./events.js')
+const invitee = require('./invitee.js')
+const post = require('./post')
+
 
 yargs.version('1.1.0')
 
@@ -159,6 +162,109 @@ yargs.command({
 })
 
 // get past events
+yargs.command({
+    command: 'get_past_events',
+    describe: 'gets all past events for a user - both hosting and invited to',
+    builder: {
+        userID: {
+            describe: 'user id number',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        events.getPastEvents(argv.userID)
+    }
+})
 
+// invite a user to an event
+yargs.command({
+    command: 'invite',
+    describe: 'command to invite a user to and event',
+    builder: {
+        eventID: {
+            describe: 'event id for event that user will be invited to',
+            demandOption: true,
+            type: 'string'
+        },
+        userID: {
+            describe: 'user id for user to be invited to event',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        invitee.inviteUser(argv.eventID, argv.userID)
+    }
+})
 
+yargs.command({
+    command: 'rsvp',
+    describe: 'command that allows someone to rsvp to an event',
+    builder: {
+        eventID: {
+            describe: 'event id for event that user is responding to',
+            demandOption: true,
+            type: 'string'
+        },
+        userID: {
+            describe: 'user id for user who is responding to event',
+            demandOption: true,
+            type: 'string'
+        },
+        response: {
+            describe: 'User response. Must be "Y", "N", or "M"',
+            demandOption: true,
+            type: 'string'
+        },
+        dish: {
+            describe: 'Dish that user plans to bring to the event',
+            demandOption: true,
+            type: 'string'
+        }
+    }, 
+    handler: (argv) => {
+        invitee.rsvp(argv.eventID, argv.userID, argv.response, argv.dish)
+    }
+})
+
+yargs.command({
+    command: 'get_responses',
+    descbribe: 'get all of the invitees and their responses to an event',
+    builder: {
+        eventID: {
+            describe: 'event id for event in question',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        invitee.getInvitees(argv.eventID)
+    }
+})
+
+yargs.command({
+    command: 'post',
+    describe: 'write a post on an event wall',
+    builder: {
+        eventID: {
+            describe: 'event id for event in question',
+            demandOption: true,
+            type: 'string'
+        },
+        userID: {
+            describe: 'user id for user who is posting',
+            demandOption: true,
+            type: 'string'
+        },
+        text: {
+            describe: 'actual text of the post',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        post.createPost(argv.eventID, argv.userID, argv.text)
+    }
+})
 yargs.parse()

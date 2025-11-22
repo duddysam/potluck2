@@ -44,8 +44,20 @@ async function getUpcomingEvents(userID) {
     await connectDB();
 
     try {
-        const res = await client.query(`SELECT DISTINCT eventname, date, location FROM event JOIN invitee using(eventid) WHERE host = '${userID}' OR invitee.inviteeid = '${userID}' AND date > now()`)
+        const res = await client.query(`SELECT DISTINCT eventname, date, location FROM event JOIN invitee using(eventid) WHERE host = '${userID}' OR invitee.inviteeid = '${userID}' AND date >= now()`)
         console.log(res['rows'])
+    } catch (err) {
+        console.error('Error Executing Query', err)
+    } finally {
+        await client.end()
+    }
+}
+
+async function getPastEvents(userID) {
+    await connectDB();
+
+    try {
+        const res = await client.query(`SELECT DISTINCT eventname, date, location FROM event JOIN invitee using(eventid) WHERE host = '${userID}' OR invitee.inviteeid = '${userID}' AND date < now()`)
     } catch (err) {
         console.error('Error Executing Query', err)
     } finally {
@@ -57,6 +69,7 @@ module.exports = {
     createEvent: createEvent,
     deleteEvent: deleteEvent,
     getHostEvents: getHostEvents,
-    getUpcomingEvents: getUpcomingEvents
+    getUpcomingEvents: getUpcomingEvents,
+    getPastEvents: getPastEvents
 }
 

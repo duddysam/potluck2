@@ -26,8 +26,8 @@ create table event
 
 create table invitee
 (
-  response CHAR(1) not null,
-  dish VARCHAR(25) not null,
+  response CHAR(1), -- originally had 'not null'
+  dish VARCHAR(25), -- originally had 'not null'
   eventID INT not null,
   inviteeID INT not null,
   PRIMARY KEY (eventID, inviteeID),

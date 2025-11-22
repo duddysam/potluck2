@@ -1,0 +1,1 @@
+const { client, connectDB } = require('./index')
