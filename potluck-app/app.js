@@ -267,4 +267,19 @@ yargs.command({
         post.createPost(argv.eventID, argv.userID, argv.text)
     }
 })
+
+yargs.command({
+    command: 'get_posts',
+    describe: 'get all posts for an event',
+    builder: {
+        eventID: {
+            describe: 'event id for event in question',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        post.getPosts(argv.eventID)
+    }
+})
 yargs.parse()

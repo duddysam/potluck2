@@ -16,13 +16,19 @@ async function createPost(eventID, userID, text) {
 }
 
 async function getPosts(eventID) {
-    await conndectDB();
+    await connectDB();
 
     try {
-        const res = await client.query(`SELECT `)
+        const res = await client.query(`SELECT appuser.firstname, appuser.lastname, post.date, post.message FROM post JOIN appuser ON post.userid = appuser.userid WHERE eventid = '${eventID}'`)
+        console.log(res['rows'])
+    } catch (err) {
+        console.error('Error Executing Query', err)
+    } finally {
+        await client.end()
     }
 }
 
 module.exports = {
-    createPost: createPost
+    createPost: createPost,
+    getPosts: getPosts
 }
