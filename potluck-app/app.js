@@ -3,6 +3,8 @@ const appUser = require('./appuser.js')
 const events = require('./events.js')
 const invitee = require('./invitee.js')
 const post = require('./post')
+const announcement = require('./announcement')
+const comment = require('./comment')
 
 
 yargs.version('1.1.0')
@@ -282,4 +284,91 @@ yargs.command({
         post.getPosts(argv.eventID)
     }
 })
+
+
+// create a comment on a post
+yargs.command({
+    command: 'comment',
+    describe: 'create a comment on a preexisting post',
+    builder: {
+        postID: {
+            describe: 'post id for post we are commenting on',
+            demandOption: true,
+            type: 'string'
+        },
+        text: {
+            describe: 'text of comment body',
+            demandOption: true,
+            type: 'string'
+        },
+        userID: {
+            describe: 'user id for user who is commenting',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        comment.comment(argv.text, argv.postID, argv.userID)
+    }
+})
+
+// get comments on a given post
+yargs.command ({
+    command: 'get_comments',
+    describe: 'get comments on a specified post',
+    builder: {
+        postID: {
+            describe: 'id for post that is we are retreiving comments for',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        comment.getComments(argv.postID)
+    }
+})
+
+// send announcement
+yargs.command({
+    command: 'sent_announcement',
+    describe: 'send announcement for an event to a user',
+    builder: {
+        eventID: {
+            describe: 'event id for event in question',
+            demandOption: true,
+            type: 'string'
+        },
+        userID: {
+            describe: 'user id for user who will receive announcement',
+            demandOption: true,
+            type: 'string'
+        },
+        text: {
+            describe: 'actual text of the announcement',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        announcement.sendAnnouncement(argv.eventID, argv.text, argv.userID)
+    }
+})
+
+// get announcements for user
+yargs.command ({
+    command: 'get_announcements',
+    describe: 'get announcements for a specified user',
+    builder: {
+        userID: {
+            describe: 'id for user are retreiving comments for',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        announcement.getAnnouncement(argv.userID)
+    }
+})
+
+
 yargs.parse()
