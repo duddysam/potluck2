@@ -1,4 +1,13 @@
-const yargs = require('yargs')
+/*******************************************************************************
+   Sam Duddy Final Project
+   CS5200 Fall 2025
+   Potluck App Database
+   
+   Description: Main application file used to aggregate and define user commands to 
+   interact with different database entities
+********************************************************************************/
+
+// linking functions for each of the entities, as defined in their own .js files
 const appUser = require('./appuser.js')
 const events = require('./events.js')
 const invitee = require('./invitee.js')
@@ -6,8 +15,10 @@ const post = require('./post')
 const announcement = require('./announcement')
 const comment = require('./comment')
 
-
+// using the yargs nmp module for command line argumemt definition and execution
+const yargs = require('yargs')
 yargs.version('1.1.0')
+
 
 // add a new user
 yargs.command({
@@ -42,6 +53,26 @@ yargs.command({
     },
     handler: (argv) => {
         appUser.addUser(argv.f_name, argv.l_name, argv.user_name, argv.password, argv.email)
+    }
+})
+
+// update username
+yargs.command({
+    command: 'update_username',
+    describe: 'update a username based on the userID',
+    builder: {
+        userID: {
+            demandOption: true,
+            type: 'string'
+        },
+        username: {
+            describe: 'new username for user',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        appUser.updateUsername(argv.userID, argv.username)
     }
 })
 
@@ -131,6 +162,26 @@ yargs.command({
     }
 })
 
+// update event date
+yargs.command({
+    command: 'update_event_date',
+    describe: 'update an event date',
+    builder: {
+        eventID: {
+            demandOption: true,
+            type: 'string'
+        },
+        event_date: {
+            describe: 'new event date',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        events.updateEventDate(argv.eventID, argv.event_date)
+    }
+})
+
 // get all events for a hostID
 yargs.command({
     command: 'get_host_events',
@@ -200,6 +251,28 @@ yargs.command({
     }
 })
 
+// uninvite a user from an event
+yargs.command({
+    command: 'uninvite',
+    describe: 'remove invitee from event',
+    builder: {
+        eventID: {
+            describe: 'event id for event that user will be uninvited from',
+            demandOption: true,
+            type: 'string'
+        },
+        userID: {
+            describe: 'user id for user to be uninvited from event',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        invitee.deleteInvitee(argv.eventID, argv.userID)
+    }
+})
+
+// rsvp to an event
 yargs.command({
     command: 'rsvp',
     describe: 'command that allows someone to rsvp to an event',
@@ -230,6 +303,7 @@ yargs.command({
     }
 })
 
+// get all invitee responses for an event
 yargs.command({
     command: 'get_responses',
     descbribe: 'get all of the invitees and their responses to an event',
@@ -245,6 +319,8 @@ yargs.command({
     }
 })
 
+
+// write a post on an event
 yargs.command({
     command: 'post',
     describe: 'write a post on an event wall',
@@ -270,6 +346,44 @@ yargs.command({
     }
 })
 
+// delete a post
+yargs.command({
+    command: 'delete_post',
+    describe: 'delete post for an event',
+    builder: {
+        postID: {
+            describe: 'post id for post to be deleted',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        post.deletePost(argv.postID)
+    }
+})
+
+// update a post
+yargs.command({
+    command: 'update_post',
+    describe: 'update a post message',
+    builder: {
+        postID: {
+            describe: 'post id for post to be updated',
+            demandOption: true,
+            type: 'string'
+        },
+        message: {
+            describe: 'new message',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        post.updatePost(argv.postID, argv.message)
+    }
+})
+
+// get all posts for an event
 yargs.command({
     command: 'get_posts',
     describe: 'get all posts for an event',
@@ -328,9 +442,46 @@ yargs.command ({
     }
 })
 
+// update comment
+yargs.command({
+    command: 'update_comment',
+    describe: 'update a comment message',
+    builder: {
+        commentID: {
+            describe: 'comment id for comment to be updated',
+            demandOption: true,
+            type: 'string'
+        },
+        comment: {
+            describe: 'new comment',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        post.updateComment(argv.commentID, argv.comment)
+    }
+})
+
+// delete comment
+yargs.command({
+    command: 'delete_comment',
+    describe: 'delete comment for an event',
+    builder: {
+        commentID: {
+            describe: 'comment id for comment to be deleted',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        post.deleteComment(argv.commentID)
+    }
+})
+
 // send announcement
 yargs.command({
-    command: 'sent_announcement',
+    command: 'send_announcement',
     describe: 'send announcement for an event to a user',
     builder: {
         eventID: {
@@ -367,6 +518,43 @@ yargs.command ({
     },
     handler: (argv) => {
         announcement.getAnnouncement(argv.userID)
+    }
+})
+
+// update announcement
+yargs.command({
+    command: 'update_announcement',
+    describe: 'update a announcement message',
+    builder: {
+        announcementID: {
+            describe: 'announcement id for announcement to be updated',
+            demandOption: true,
+            type: 'string'
+        },
+        comment: {
+            describe: 'new announcement',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        post.updateAnnouncement(argv.announcementID, argv.comment)
+    }
+})
+
+// delete announcement
+yargs.command({
+    command: 'delete_announcement',
+    describe: 'delete announcement for an event',
+    builder: {
+        announcementID: {
+            describe: 'announcement id for announcement to be deleted',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        post.deleteAnnouncement(argv.announcementID)
     }
 })
 

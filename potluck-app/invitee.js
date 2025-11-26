@@ -1,3 +1,11 @@
+/*******************************************************************************
+   Sam Duddy Final Project
+   CS5200 Fall 2025
+   Potluck App Database
+   
+   Description: Functions to perform CRUD operations on Invitee Table
+********************************************************************************/
+
 const { client, connectDB } = require('./index')
 
 async function inviteUser(eventID, userID) {
@@ -37,8 +45,21 @@ async function getInvitees(eventID) {
     }
 }
 
+async function deleteInvitee(eventID, userID) {
+    await connectDB();
+
+    try {
+        const res = await client.query(`DELETE FROM invitee WHERE inviteeID = '${userID}' AND eventID = '${eventID}'`)
+    } catch (err) {
+        console.error('Error Executing Query', err)
+    } finally {
+        await client.end()
+    }
+}
+
 module.exports = {
     inviteUser: inviteUser,
     rsvp: rsvp,
-    getInvitees: getInvitees
+    getInvitees: getInvitees,
+    deleteInvitee: deleteInvitee
 }

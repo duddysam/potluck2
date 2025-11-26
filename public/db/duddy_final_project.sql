@@ -2,6 +2,8 @@
    Sam Duddy Final Project
    CS5200 Fall 2025
    Potluck App Database
+   
+   Description: Dump file for database creation and initial table population
 ********************************************************************************/
 
 create table appUser
